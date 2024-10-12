@@ -1,0 +1,1 @@
+# rust-chef-sccache
