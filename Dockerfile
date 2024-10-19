@@ -1,7 +1,12 @@
 # We want rust, cargo-chef, udev bits, and sccache when building rust projects
-FROM lukemathwalker/cargo-chef:latest-rust-1
+# and wasm stuff too
+FROM rust:latest
 RUN apt-get update && apt-get -y --no-install-recommends install libudev-dev clang
+# https://blog.rust-lang.org/inside-rust/2023/01/30/cargo-sparse-protocol.html
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+RUN cargo install cargo-chef --locked --version 0.1.68
 RUN cargo install sccache --version ^0.8.2
 RUN rustup target install wasm32-unknown-unknown
 RUN cargo install wasm-bindgen-cli
 RUN apt-get clean
+RUN rm -rf $CARGO_HOME/registry/
